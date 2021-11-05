@@ -1,4 +1,4 @@
-package assignments.a3;
+package assignments.a3.model;
 
 public class DrawingModel {
 }
