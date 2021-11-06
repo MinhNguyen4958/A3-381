@@ -1,6 +1,6 @@
 package assignments.a3.shapes;
 
-abstract class XShape {
+public abstract class XShape {
     double normX;
     double normY;
 

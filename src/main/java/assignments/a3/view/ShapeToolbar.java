@@ -27,40 +27,62 @@ public class ShapeToolbar extends VBox {
 
 
     public ShapeToolbar() {
+
+        // enables resizing for the buttons
+        this.heightProperty().addListener((observable, oldValue, NewValue) -> {
+            rect_btn.setPrefHeight(this.getHeight() / 5);
+            sqr_btn.setPrefHeight(this.getHeight() / 5);
+            circl_btn.setPrefHeight(this.getHeight() / 5);
+            oval_btn.setPrefHeight(this.getHeight() / 5);
+            line_btn.setPrefHeight(this.getHeight() / 5);
+        });
+
+        // set up the rect button
         Rectangle rect_icon = new Rectangle(30, 20);
         VBox rect_box = new VBox(rect_icon, new Label("Rect"));
         rect_box.setAlignment(Pos.CENTER);
         rect_btn = new Button( "", rect_box);
         rect_btn.setPrefHeight(100);
         rect_btn.setPrefWidth(60);
+//        rect_btn.setMinHeight(0);
 
+        // set up the square button
         Rectangle sqr_icon = new Rectangle(25, 25);
         VBox sqr_box = new VBox(sqr_icon, new Label("Square"));
         sqr_box.setAlignment(Pos.CENTER);
         sqr_btn = new Button("", sqr_box);
         sqr_btn.setPrefHeight(100);
         sqr_btn.setPrefWidth(60);
+//        sqr_btn.setMinHeight(this.getHeight() / 5);
 
+        // set up the circle button
         Circle circl_icon = new Circle(15.0);
         VBox circl_box = new VBox(circl_icon, new Label("Circle"));
         circl_box.setAlignment(Pos.CENTER);
         circl_btn = new Button("", circl_box);
         circl_btn.setPrefHeight(100);
         circl_btn.setPrefWidth(60);
+//        circl_btn.setMinHeight(this.getHeight() / 5);
 
+        // set up the oval button
         Ellipse oval_icon = new Ellipse(15, 10);
         VBox oval_box = new VBox(oval_icon, new Label("Oval"));
         oval_box.setAlignment(Pos.CENTER);
         oval_btn = new Button("",oval_box);
         oval_btn.setPrefHeight(100);
         oval_btn.setPrefWidth(60);
+//        oval_btn.setMinHeight(this.getHeight() / 5);
 
+        // set up the line button
         Line line_icon = new Line(10, 0, 0, 30);
         VBox line_box = new VBox(line_icon, new Label("Line"));
         line_box.setAlignment(Pos.CENTER);
         line_btn = new Button("", line_box);
         line_btn.setPrefHeight(100);
         line_btn.setPrefWidth(60);
+//        line_btn.setStyle("-fx-focus-color: black");
+//        line_btn.setMinHeight(this.getHeight() / 5);
+
         this.getChildren().addAll(rect_btn, sqr_btn, circl_btn, oval_btn, line_btn);
     }
 }
