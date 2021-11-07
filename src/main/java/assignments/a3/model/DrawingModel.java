@@ -21,5 +21,11 @@ public class DrawingModel {
         subs.forEach(sub -> sub.modelChanged());
     }
 
-//    public ArrayList
+    public ArrayList<XShape> getShapes() {
+        return shapes;
+    }
+
+    public boolean contains(double x, double y) {
+        return shapes.stream().anyMatch(shape -> shape.contains(x, y));
+    }
 }

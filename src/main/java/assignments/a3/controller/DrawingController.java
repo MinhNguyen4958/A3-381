@@ -6,6 +6,7 @@ import javafx.scene.paint.Paint;
 public class DrawingController {
     InteractionModel iModel;
     DrawingModel model;
+    double prevX, prevY;
 
 
 
@@ -29,9 +30,6 @@ public class DrawingController {
         iModel.setColor(newColor);
     }
 
-//    public void setShape(String shape) {
-//        switch (shape) {
-//            case:
-//        }
-//    }
+    public void setShape(String shape) {
+    }
 }
