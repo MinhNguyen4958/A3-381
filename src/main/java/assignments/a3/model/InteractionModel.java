@@ -5,8 +5,8 @@ import javafx.scene.paint.Paint;
 import java.util.ArrayList;
 
 public class InteractionModel {
-    XShape selectedShape;
-    Paint selectedColor;
+    private XShape selectedShape;
+    private Paint selectedColor;
     ArrayList<InteractionModelSubscriber> subs;
 
     public InteractionModel() {
@@ -29,5 +29,16 @@ public class InteractionModel {
     public void setColor(Paint newColor) {
         selectedColor = newColor;
         notifyiSubs();
+    }
+
+    public XShape getSelectedShape() {
+        return selectedShape;
+    }
+
+    public Paint getSelectedColor() {
+        return selectedColor;
+    }
+
+    public void unselect() {
     }
 }
