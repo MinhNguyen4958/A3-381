@@ -29,6 +29,10 @@ public class DrawingController {
         iModel.setColor(newColor);
     }
 
+    public void setShape(String shape_txt) {
+
+    }
+
     public void handlePressed(double normX, double normY, MouseEvent event) {
         prevX = normX;
         prevY = normY;

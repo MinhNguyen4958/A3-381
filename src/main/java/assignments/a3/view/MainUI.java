@@ -35,6 +35,7 @@ public class MainUI extends BorderPane implements InteractionModelSubscriber, Dr
     public void setiModel(InteractionModel newiModel) {
         iModel = newiModel;
         iModel.setColor(Color.valueOf("Aqua"));
+//        iModel.setShape();
     }
 
     public void setController(DrawingController controller) {
@@ -44,9 +45,9 @@ public class MainUI extends BorderPane implements InteractionModelSubscriber, Dr
         canvasView.myCanvas.setOnMouseReleased(e -> controller.handleReleased(e.getX() / canvasView.width, e.getY() / canvasView.height, e));
 
         rightbar.getColorButtons().forEach(button -> button.setOnMouseClicked(e -> controller.setColor(Color.valueOf(button.textProperty().get()))));
+        leftbar.getShapeButtons().forEach(button -> button.setOnMouseClicked(e -> controller.setShape(button.getShapeID())));
     }
 
-    public
     @Override
     public void modelChanged() {
         draw();
