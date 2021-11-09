@@ -29,7 +29,7 @@ public class DrawingController {
         iModel.setColor(newColor);
     }
 
-    public void setShape(String shape_txt) {
+    public void setShape(String shapeID) {
 
     }
 
@@ -94,7 +94,7 @@ public class DrawingController {
         }
     }
 
-    public void handleDragged(double normX, double normY, MouseEvent event) {
+    public void handleDragged(double normX, double normY, MouseEvent event, String shapeID) {
         double dX = normX - prevX;
         double dY = normY - prevY;
         prevX = normX;
@@ -111,12 +111,13 @@ public class DrawingController {
             }
 
             case PREPARE_CREATE -> {
-                model.createShape(normX, normY);
+                model.createShape(normX, normY, dX, dY, iModel.getSelectedColor(), iModel.getSelectedButton().getShapeID());
                 currentState = State.RESIZING;
             }
 
             case RESIZING -> {
                 //TODO: figuring out on how to resize a shape
+
             }
         }
     }

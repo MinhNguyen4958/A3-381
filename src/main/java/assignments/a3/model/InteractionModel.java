@@ -1,5 +1,6 @@
 package assignments.a3.model;
 import assignments.a3.shapes.XShape;
+import assignments.a3.view.ShapeButton;
 import javafx.scene.paint.Paint;
 
 import java.util.ArrayList;
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 public class InteractionModel {
     private XShape selectedShape;
     private Paint selectedColor;
+    private ShapeButton selectedButton;
     ArrayList<InteractionModelSubscriber> subs;
 
     public InteractionModel() {
@@ -31,6 +33,11 @@ public class InteractionModel {
         notifyiSubs();
     }
 
+    public void setButton(ShapeButton newButton) {
+        selectedButton = newButton;
+        notifyiSubs();
+    }
+
     public XShape getSelectedShape() {
         return selectedShape;
     }
@@ -39,6 +46,9 @@ public class InteractionModel {
         return selectedColor;
     }
 
+    public ShapeButton getSelectedButton() { return selectedButton; }
     public void unselect() {
+        selectedShape = null;
+        notifyiSubs();
     }
 }

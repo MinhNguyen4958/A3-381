@@ -54,14 +54,14 @@ public class ShapeToolbar extends VBox {
             shape_btns.forEach(button -> button.setPrefHeight(this.getHeight() / 5));
         });
 
-        for (ToggleButton shape_btn : shape_btns) {
+        for (ShapeButton shape_btn : shape_btns) {
             this.getChildren().add(shape_btn);
             shape_btn.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(2.0))));
             shape_btn.selectedProperty().addListener((obs, oldVal, newVal) -> {
-                if (shape_btn.isSelected()) {
-                    shape_btn.setBorder(new Border(new BorderStroke(Color.VIOLET, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3.0))));
-                } else {
-                    shape_btn.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(2.0))));
+                if (!shape_btn.isSelected()) {
+                    shape_btn.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3.0))));
+                    shape_btn.getShapeIcon().setFill(Color.BLACK);
+                    shape_btn.getShapeIcon().setStroke(Color.BLACK);
                 }
             });
         }

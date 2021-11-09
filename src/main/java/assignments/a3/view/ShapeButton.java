@@ -8,10 +8,11 @@ import javafx.scene.shape.*;
 public class ShapeButton extends ToggleButton {
 
     private String shapeID;
+    private Shape shape_icon;
 
     public ShapeButton(String shape_txt, ToggleGroup toggleGroup) {
         shapeID = shape_txt;
-        Shape shape_icon = null;
+        shape_icon = null;
         switch (shape_txt) {
             case "Rect": {
                 shape_icon = new Rectangle(30, 20);
@@ -47,5 +48,6 @@ public class ShapeButton extends ToggleButton {
     }
 
     public String getShapeID() { return shapeID; }
+    public Shape getShapeIcon() { return shape_icon; }
 
 }
