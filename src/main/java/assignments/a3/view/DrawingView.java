@@ -7,6 +7,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 
+import java.util.ArrayList;
+
 public class DrawingView extends Pane implements DrawingModelSubscribers, InteractionModelSubscriber {
     protected Canvas myCanvas;
     protected GraphicsContext gc;
@@ -44,33 +46,38 @@ public class DrawingView extends Pane implements DrawingModelSubscribers, Intera
 
     private void draw() {
         gc.clearRect(0, 0, myCanvas.getWidth(), myCanvas.getHeight());
-        String shapeID = iModel.getSelectedButton().getShapeID();
-        XShape selected = iModel.getSelectedShape();
+        ArrayList<XShape> shape_list = model.getShapes();
         double canvasWidth = myCanvas.getWidth();
         double canvasHeight = myCanvas.getHeight();
+        for (XShape shape : shape_list) {
+            switch(shape.getID()) {
+                case "Rect" -> {
+                    gc.setFill(shape.getColor());
+                    gc.strokeRect(shape.getX() * canvasWidth , shape.getY() * canvasHeight, shape.getWidth() * canvasWidth, shape.getHeight() * canvasHeight);
+                    gc.fillRect(shape.getX() * canvasWidth , shape.getY() * canvasHeight, shape.getWidth() * canvasWidth, shape.getHeight() * canvasHeight);
+                }
 
-        switch(shapeID) {
-            case "Rect" -> {
-                gc.setFill(iModel.getSelectedColor());
-                gc.fillRect(selected.getX() * canvasWidth , selected.getY() * canvasHeight, selected.getWidth() * canvasWidth, selected.getHeight() * canvasHeight);
-            }
+                case "Square" -> {
+                    gc.setFill(shape.getColor());
+                    gc.strokeRect(shape.getX() * canvasWidth , shape.getY() * canvasHeight, shape.getWidth() * canvasWidth, shape.getWidth() * canvasHeight);
+                    gc.fillRect(shape.getX() * canvasWidth , shape.getY() * canvasHeight, shape.getWidth() * canvasWidth, shape.getWidth() * canvasHeight);
 
-            case "Square" -> {
-                gc.setFill(iModel.getSelectedColor());
-                gc.fillRect(selected.getX() * canvasWidth , selected.getY() * canvasHeight, selected.getWidth() * canvasWidth, selected.getWidth() * canvasHeight);
-            }
+                }
 
-            case "Oval" -> {
-                gc.setFill(iModel.getSelectedColor());
-                gc.fillOval(selected.getX() * canvasWidth, selected.getY() * canvasHeight, selected.getWidth() * canvasWidth, selected.getHeight() * canvasHeight);
-            }
-            case "Circle" -> {
-                gc.setFill(iModel.getSelectedColor());
-                gc.fillOval(selected.getX() * canvasWidth, selected.getY() * canvasHeight, selected.getWidth() * canvasWidth, selected.getWidth() * canvasHeight);
-            }
-            case "Line" -> {
-                gc.setStroke(iModel.getSelectedColor());
-                gc.strokeLine(selected.getX(), selected.getY(), selected.getWidth(), selected.getHeight());
+                case "Oval" -> {
+                    gc.setFill(shape.getColor());
+                    gc.strokeOval(shape.getX() * canvasWidth, shape.getY() * canvasHeight, shape.getWidth() * canvasWidth, shape.getHeight() * canvasHeight);
+                    gc.fillOval(shape.getX() * canvasWidth, shape.getY() * canvasHeight, shape.getWidth() * canvasWidth, shape.getHeight() * canvasHeight);
+                }
+                case "Circle" -> {
+                    gc.setFill(shape.getColor());
+                    gc.strokeOval(shape.getX() * canvasWidth, shape.getY() * canvasHeight, shape.getWidth() * canvasWidth, shape.getWidth() * canvasHeight);
+                    gc.fillOval(shape.getX() * canvasWidth, shape.getY() * canvasHeight, shape.getWidth() * canvasWidth, shape.getWidth() * canvasHeight);
+                }
+                case "Line" -> {
+                    gc.setStroke(shape.getColor());
+                    gc.strokeLine(shape.getX(), shape.getY(), shape.getWidth(), shape.getHeight());
+                }
             }
         }
     }

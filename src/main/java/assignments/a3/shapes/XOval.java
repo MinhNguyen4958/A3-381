@@ -3,8 +3,8 @@ package assignments.a3.shapes;
 import javafx.scene.paint.Paint;
 
 public class XOval extends XShape {
-    public XOval(double newLeft, double newTop, double newWidth, double newHeight) {
-        super(newLeft, newTop, newWidth, newHeight);
+    public XOval(double newLeft, double newTop, double newWidth, double newHeight, String shapeID, Paint color) {
+        super(newLeft, newTop, newWidth, newHeight, shapeID, color);
     }
 
     @Override

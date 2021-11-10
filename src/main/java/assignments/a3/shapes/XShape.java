@@ -1,9 +1,12 @@
 package assignments.a3.shapes;
 
 
+import javafx.scene.paint.Paint;
 
 public abstract class XShape {
-    protected double x, y, width, height;
+    protected double x, y, initialX, initialY, width, height;
+    protected String ID;
+    protected Paint shapeColor;
 
     public double getX() {
         return x;
@@ -37,11 +40,38 @@ public abstract class XShape {
         this.height = height;
     }
 
-    public XShape(double newLeft, double newTop, double newWidth, double newHeight) {
+    public String getID() { return ID; }
+
+    public Paint getColor() {
+        return shapeColor;
+    }
+
+    public void setInitialX(double initialX) {
+        this.initialX = initialX;
+    }
+
+    public void setInitialY(double initialY) {
+        this.initialY = initialY;
+    }
+
+    public double getInitialX() {
+        return initialX;
+    }
+
+    public double getInitialY() {
+        return initialY;
+    }
+
+    public XShape(double newLeft, double newTop, double newWidth, double newHeight, String ShapeID, Paint newColor) {
+        initialX = newLeft;
+        initialY = newTop;
         x = newLeft;
         y = newTop;
+
         width = newWidth;
         height = newHeight;
+        ID = ShapeID;
+        shapeColor = newColor;
     }
 
     public void resize(double newX, double newY, double dX, double dY) {

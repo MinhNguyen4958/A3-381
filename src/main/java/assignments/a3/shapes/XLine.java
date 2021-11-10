@@ -7,9 +7,9 @@ public class XLine extends XShape {
     private double length;
     private double tolerance;
 
-    public XLine(double x1, double y1, double x2, double y2) {
+    public XLine(double x1, double y1, double x2, double y2, String shapeID, Paint color) {
         // for lines left = x1, top = y1, width = x2, height = y2
-        super(x1, y1, x2, y2);
+        super(x1, y1, x2, y2, shapeID, color);
         tolerance = 10;
         length = dist(x1, y1, x2, y2);
         ratioA = (y1 -y2) / length;
