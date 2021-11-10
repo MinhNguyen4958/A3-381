@@ -67,8 +67,9 @@ public class ShapeToolbar extends VBox {
         }
         // on startup the rectangle button is selected
         shape_btns.get(0).setSelected(true);
+    }
 
-
-
+    public ShapeButton getSelected() {
+        return shape_btns.stream().filter(button -> button.isSelected()).findFirst().orElse(null);
     }
 }

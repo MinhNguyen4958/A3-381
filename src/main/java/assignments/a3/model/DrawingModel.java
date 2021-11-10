@@ -13,7 +13,6 @@ public class DrawingModel {
     public DrawingModel() {
         shapes = new ArrayList<>();
         subs = new ArrayList<>();
-
     }
     // getter methods for shape lists
     public ArrayList<XShape> getShapes() {
@@ -28,25 +27,32 @@ public class DrawingModel {
         subs.forEach(sub -> sub.modelChanged());
     }
 
-    public void createShape(double x, double y, double newWidth, double newHeight, Paint newColor, String shapeID) {
-        // create a shape based on the shapeID taken from shape buttons
+    public XShape createShape(double x, double y, double newWidth, double newHeight, Paint newColor, String shapeID) {
+
+        // create a  temporary shape based on the shapeID taken from shape buttons
         switch (shapeID) {
-            case "Rect":
-                shapes.add(new XRectangle(x, y, newWidth, newHeight, newColor));
-                break;
-            case "Square":
-                shapes.add(new XSquare(x, y, newWidth, newWidth, newColor));
-                break;
-            case "Oval":
-                shapes.add(new XOval(x, y, newWidth, newHeight, newColor));
-                break;
-            case "Circle":
-                shapes.add(new XCircle(x, y, newWidth, newWidth, newColor));
-                break;
-            case "Line":
-                shapes.add(new XLine(x, y, newWidth, newHeight, newColor));
-                break;
+            case "Rect" -> { return new XRectangle(x, y, newWidth, newHeight); }
+            case "Square" -> { return new XSquare(x, y, newWidth, newWidth); }
+            case "Oval" -> { return new XOval(x, y, newWidth, newHeight); }
+            case "Circle" -> { return new XCircle(x, y, newWidth, newWidth); }
+            case "Line" ->  { return new XLine(x, y, x, y); }
         }
+
+        return null;
+    }
+
+    public void addShape(XShape shape) {
+        shapes.add(shape);
+        notifySubs();
+    }
+
+    public void resizeShape(XShape shape, double newWidth, double newHeight) {
+        double w = shape.getWidth();
+        double h = shape.getHeight();
+        w += newWidth;
+        h += newHeight;
+        shape.setHeight(h);
+        shape.setWidth(w);
         notifySubs();
     }
 
@@ -65,9 +71,5 @@ public class DrawingModel {
 
     public boolean hitEdge(double normX, double normY) {
         return false;
-    }
-
-    public void resizeShape(double newWidth, double newHeight) {
-
     }
 }

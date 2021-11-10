@@ -4,8 +4,8 @@ package assignments.a3.shapes;
 import javafx.scene.paint.Paint;
 
 public class XSquare extends XShape {
-    public XSquare(double newLeft, double newTop, double newWidth, double newHeight, Paint newColor) {
-        super(newLeft, newTop, newWidth, newHeight, newColor);
+    public XSquare(double newLeft, double newTop, double newWidth, double newHeight) {
+        super(newLeft, newTop, newWidth, newHeight);
     }
 
     @Override

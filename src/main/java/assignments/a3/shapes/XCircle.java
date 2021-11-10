@@ -4,8 +4,8 @@ import javafx.scene.paint.Paint;
 
 public class XCircle extends XShape {
     private double radius;
-    public XCircle(double newLeft, double newTop, double newWidth, double newHeight, Paint newColor) {
-        super(newLeft, newTop, newWidth, newHeight, newColor);
+    public XCircle(double newLeft, double newTop, double newWidth, double newHeight) {
+        super(newLeft, newTop, newWidth, newHeight);
         radius = newWidth / 2;
     }
 

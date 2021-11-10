@@ -9,7 +9,7 @@ public class DrawingController {
     DrawingModel model;
     double prevX, prevY;
 
-    protected enum State { READY, MOVING, PREPARE_CREATE, RESIZING }
+    protected enum State { READY, PREPARE_CREATE, RESIZING }
 
     private State currentState;
 
@@ -29,36 +29,12 @@ public class DrawingController {
         iModel.setColor(newColor);
     }
 
-    public void setShape(String shapeID) {
-
-    }
-
     public void handlePressed(double normX, double normY, MouseEvent event) {
         prevX = normX;
         prevY = normY;
 
         switch (currentState) {
             case READY -> {
-                /**
-                 * context: on a shape
-                 * side effects: set selection
-                 */
-                boolean hitShape = model.contains(normX, normY);
-                boolean hitEdge = model.hitEdge(normX, normY);
-                if (hitShape) {
-                    //side effect: set selection
-                    iModel.setShape(model.whichShape(normX, normY));
-                    // move to new state
-                    currentState = State.MOVING;
-                } else if (hitEdge) {
-                    /**
-                     * context: on a shape's bottom right edge
-                     * side effect: set selection
-                     */
-                    iModel.setShape(model.whichShape(normX, normY));
-                    // move to next state
-                    currentState = State.RESIZING;
-                } else {
                     /**
                      * context: none
                      * side effect: none
@@ -67,8 +43,8 @@ public class DrawingController {
                     currentState = State.PREPARE_CREATE;
                 }
             }
+
         }
-    }
 
     public void handleReleased(double normX, double normY, MouseEvent event) {
         switch (currentState) {
@@ -78,15 +54,15 @@ public class DrawingController {
                  * side effects: none
                  *
                  */
-
                 // move back to ready state
                 currentState = State.READY;
             }
-            case MOVING, RESIZING -> {
+            case RESIZING -> {
                 /**
                  * context none
-                 * side effects: unselected
+                 * side effects: add the selected shape to model.shapeList, then unselect
                  */
+                model.addShape(iModel.getSelectedShape());
                 iModel.unselect();
                 //move to new state
                 currentState = State.READY;
@@ -95,30 +71,33 @@ public class DrawingController {
     }
 
     public void handleDragged(double normX, double normY, MouseEvent event, String shapeID) {
+        double initialX = prevX;
+        double initialY = prevY;
+
         double dX = normX - prevX;
         double dY = normY - prevY;
         prevX = normX;
         prevY = normY;
-
         switch (currentState) {
-            case MOVING -> {
-                /**
-                 * context: on a shape
-                 * set effect: move the shape
-                 */
-                // stay in this state
-                model.moveShape(iModel.getSelectedShape(), dX, dY);
-            }
-
-            case PREPARE_CREATE -> {
-                model.createShape(normX, normY, dX, dY, iModel.getSelectedColor(), iModel.getSelectedButton().getShapeID());
-                currentState = State.RESIZING;
-            }
-
             case RESIZING -> {
                 //TODO: figuring out on how to resize a shape
 
+//                String shapeID =
+                model.resizeShape(iModel.getSelectedShape(), dX, dY);
+                model.addShape(iModel.getSelectedShape());
+
+                // keep the current state
             }
+
+            case PREPARE_CREATE -> {
+                /**
+                 * context: none
+                 * side effect:
+                 */
+                iModel.setShape(model.createShape(initialX, initialY, 0, 0, iModel.getSelectedColor(), iModel.getSelectedButton().getShapeID()));
+                currentState = State.RESIZING;
+            }
+
         }
     }
 

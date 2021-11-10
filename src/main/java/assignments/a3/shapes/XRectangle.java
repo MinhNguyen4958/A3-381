@@ -4,8 +4,8 @@ import javafx.scene.paint.Paint;
 
 public class XRectangle extends XShape {
 
-    public XRectangle(double newX, double newY, double newWidth, double newHeight, Paint newColor) {
-        super(newX, newY, newWidth, newHeight, newColor);
+    public XRectangle(double newX, double newY, double newWidth, double newHeight) {
+        super(newX, newY, newWidth, newHeight);
     }
     @Override
     public boolean contains(double x, double y) {
