@@ -45,38 +45,31 @@ public class DrawingView extends Pane implements DrawingModelSubscribers, Intera
     }
 
     private void draw() {
-        gc.clearRect(0, 0, myCanvas.getWidth(), myCanvas.getHeight());
-        ArrayList<XShape> shape_list = model.getShapes();
         double canvasWidth = myCanvas.getWidth();
         double canvasHeight = myCanvas.getHeight();
+        gc.clearRect(0, 0, canvasWidth, canvasHeight);
+        ArrayList<XShape> shape_list = model.getShapes();
         for (XShape shape : shape_list) {
+            double drawingX = shape.getDrawingX();
+            double drawingY = shape.getDrawingY();
+            double shapeWidth = shape.getWidth();
+            double shapeHeight = shape.getHeight();
             switch(shape.getID()) {
-                case "Rect" -> {
+                case "Rect", "Square" -> {
                     gc.setFill(shape.getColor());
-                    gc.strokeRect(shape.getX() * canvasWidth , shape.getY() * canvasHeight, shape.getWidth() * canvasWidth, shape.getHeight() * canvasHeight);
-                    gc.fillRect(shape.getX() * canvasWidth , shape.getY() * canvasHeight, shape.getWidth() * canvasWidth, shape.getHeight() * canvasHeight);
+                    gc.strokeRect(drawingX * canvasWidth , drawingY * canvasHeight, shapeWidth * canvasWidth, shapeHeight * canvasHeight);
+                    gc.fillRect(drawingX * canvasWidth , drawingY * canvasHeight, shapeWidth * canvasWidth, shapeHeight * canvasHeight);
                 }
 
-                case "Square" -> {
+                case "Oval", "Circle" -> {
                     gc.setFill(shape.getColor());
-                    gc.strokeRect(shape.getX() * canvasWidth , shape.getY() * canvasHeight, shape.getWidth() * canvasWidth, shape.getWidth() * canvasHeight);
-                    gc.fillRect(shape.getX() * canvasWidth , shape.getY() * canvasHeight, shape.getWidth() * canvasWidth, shape.getWidth() * canvasHeight);
-
+                    gc.strokeOval(drawingX * canvasWidth, drawingY * canvasHeight, shapeWidth * canvasWidth, shapeHeight * canvasHeight);
+                    gc.fillOval(drawingX * canvasWidth, drawingY * canvasHeight, shapeWidth * canvasWidth, shapeHeight * canvasHeight);
                 }
 
-                case "Oval" -> {
-                    gc.setFill(shape.getColor());
-                    gc.strokeOval(shape.getX() * canvasWidth, shape.getY() * canvasHeight, shape.getWidth() * canvasWidth, shape.getHeight() * canvasHeight);
-                    gc.fillOval(shape.getX() * canvasWidth, shape.getY() * canvasHeight, shape.getWidth() * canvasWidth, shape.getHeight() * canvasHeight);
-                }
-                case "Circle" -> {
-                    gc.setFill(shape.getColor());
-                    gc.strokeOval(shape.getX() * canvasWidth, shape.getY() * canvasHeight, shape.getWidth() * canvasWidth, shape.getWidth() * canvasHeight);
-                    gc.fillOval(shape.getX() * canvasWidth, shape.getY() * canvasHeight, shape.getWidth() * canvasWidth, shape.getWidth() * canvasHeight);
-                }
                 case "Line" -> {
                     gc.setStroke(shape.getColor());
-                    gc.strokeLine(shape.getX(), shape.getY(), shape.getWidth(), shape.getHeight());
+                    gc.strokeLine(shape.getDrawingX(), shape.getDrawingY(), shape.getWidth(), shape.getHeight());
                 }
             }
         }

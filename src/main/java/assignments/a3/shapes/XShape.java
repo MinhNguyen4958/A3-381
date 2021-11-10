@@ -4,16 +4,46 @@ package assignments.a3.shapes;
 import javafx.scene.paint.Paint;
 
 public abstract class XShape {
-    protected double x, y, initialX, initialY, width, height;
+    // the drawing coords for gc
+    protected double drawingX;
+    protected double drawingY;
+
+    // the initial click coords
+    protected double initialX;
+    protected double initialY;
+
+    // the current mouse coords
+    protected double currentX;
+    protected double currentY;
+
+    protected double width;
+    protected double height;
     protected String ID;
     protected Paint shapeColor;
 
-    public double getX() {
-        return x;
+    public void setCurrentX(double currentX) {
+        this.currentX = currentX;
     }
 
-    public double getY() {
-        return y;
+    public void setCurrentY(double currentY) {
+        this.currentY = currentY;
+    }
+
+    public double getCurrentX() {
+        return currentX;
+    }
+
+    public double getCurrentY() {
+        return currentY;
+    }
+
+
+    public double getDrawingX() {
+        return drawingX;
+    }
+
+    public double getDrawingY() {
+        return drawingY;
     }
 
     public double getWidth() {
@@ -24,12 +54,12 @@ public abstract class XShape {
         return height;
     }
 
-    public void setX(double x) {
-        this.x = x;
+    public void setDrawingX(double drawingX) {
+        this.drawingX = drawingX;
     }
 
-    public void setY(double y) {
-        this.y = y;
+    public void setDrawingY(double drawingY) {
+        this.drawingY = drawingY;
     }
 
     public void setWidth(double width) {
@@ -65,8 +95,10 @@ public abstract class XShape {
     public XShape(double newLeft, double newTop, double newWidth, double newHeight, String ShapeID, Paint newColor) {
         initialX = newLeft;
         initialY = newTop;
-        x = newLeft;
-        y = newTop;
+        currentX = newLeft;
+        currentY = newTop;
+        drawingX = newLeft;
+        drawingY = newTop;
 
         width = newWidth;
         height = newHeight;
@@ -75,8 +107,8 @@ public abstract class XShape {
     }
 
     public void resize(double newX, double newY, double dX, double dY) {
-        x = newX;
-        y = newY;
+        drawingX = newX;
+        drawingY = newY;
         width = dX;
         height = dY;
     }

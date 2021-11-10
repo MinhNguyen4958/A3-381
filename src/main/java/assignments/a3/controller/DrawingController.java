@@ -73,19 +73,9 @@ public class DrawingController {
     public void handleDragged(double normX, double normY, MouseEvent event, String shapeID) {
         double initialX = prevX;
         double initialY = prevY;
-//
-//        double dX = normX - prevX;
-//        double dY = normY - prevY;
-//        prevX = normX;
-        prevY = normY;
         switch (currentState) {
             case RESIZING -> {
                 //TODO: figuring out on how to resize a shape
-
-                String ID = iModel.getSelectedShape().getID();
-                if (ID.equals("Line")) {
-                    model.resizeShape(iModel.getSelectedShape(), normX, normY);
-                }
                 model.resizeShape(iModel.getSelectedShape(), normX, normY);
                 model.addShape(iModel.getSelectedShape());
 

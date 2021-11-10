@@ -32,9 +32,9 @@ public class DrawingModel {
         // create a  temporary shape based on the shapeID taken from shape buttons
         switch (shapeID) {
             case "Rect" -> { return new XRectangle(x, y, newWidth, newHeight, shapeID, newColor); }
-            case "Square" -> { return new XSquare(x, y, newWidth, newWidth, shapeID, newColor); }
+            case "Square" -> { return new XSquare(x, y, newWidth, shapeID, newColor); }
             case "Oval" -> { return new XOval(x, y, newWidth, newHeight, shapeID, newColor); }
-            case "Circle" -> { return new XCircle(x, y, newWidth, newWidth, shapeID, newColor); }
+            case "Circle" -> { return new XCircle(x, y, newWidth, shapeID, newColor); }
             case "Line" ->  { return new XLine(x, y, x, y, shapeID, newColor); }
         }
 
@@ -49,22 +49,218 @@ public class DrawingModel {
     public void resizeShape(XShape shape, double mouseX, double mouseY) {
         double w = shape.getWidth();
         double h = shape.getHeight();
-        double currentX = shape.getX();
-        double currentY = shape.getY();
-        double dX = mouseX - currentX;
-        double dY = mouseY - currentY;
 
-        if
-        System.out.println("this is mouseX: " + mouseX + " ,this is currentX: " + currentX + ", and this is initialX: " +shape.getInitialX());
-        System.out.println("this is mouseY: " + mouseY+ " ,this is currentY: " + currentY + ", and this is initialY: " +shape.getInitialY());
-        System.out.println();
-        w += Math.abs(mouseX - currentX);
-        h += Math.abs(mouseY - currentY);
+        double initialX = shape.getInitialX();
+        double initialY = shape.getInitialY();
 
-        shape.setX(mouseX);
-        shape.setY(mouseY);
-        shape.setHeight(h);
-        shape.setWidth(w);
+        if (mouseX - initialX >= 0) {
+            if (mouseY - initialY >= 0) {
+                // 1st quadrant
+                shape.setWidth(0);
+                shape.setHeight(0);
+                double dX = mouseX - shape.getCurrentX();
+                double dY = mouseY - shape.getCurrentY();
+
+                if (shape.getID().equals("Rect") || shape.getID().equals("Oval")) {
+                    if (dX >= 0) {
+                        w += dX;
+                    } else if (dX <= 0) {
+                        w -= Math.abs(dX);
+                    }
+
+                    if (dY >= 0) {
+                        h += dY;
+                    } else if (dY <= 0) {
+                        h -= Math.abs(dY);
+                    }
+                } else if (shape.getID().equals("Square") || shape.getID().equals("Circle")) {
+                    if (dX >= 0) {
+                        w += dX;
+                        h += dX;
+                    } else if (dX <= 0) {
+                        w -= Math.abs(dX);
+                        h -= Math.abs(dX);
+                    }
+
+                    if (dY >= 0) {
+                        h += dY;
+                        w += dY;
+                    } else if (dY <= 0) {
+                        h -= Math.abs(dY);
+                        w -= Math.abs(dY);
+                    }
+                }
+                shape.setWidth(w);
+                shape.setHeight(h);
+                shape.setCurrentX(mouseX);
+                shape.setCurrentY(mouseY);
+
+                // the drawing coords should be the same as initials coords for this quadrant
+
+            } else if (mouseY - initialY <= 0) {
+
+                // 2nd quadrant
+                shape.setWidth(0);
+                shape.setHeight(0);
+
+                double dX = mouseX - shape.getCurrentX();
+                double dY = mouseY - shape.getCurrentY();
+
+                // calculate width, height and determine the drawing location of Y coord
+                if (shape.getID().equals("Rect") || shape.getID().equals("Oval")) {
+                    if (dX <= 0) {
+                        w -= Math.abs(dX);
+                    } else if (dX >= 0) {
+                        w += dX;
+                    }
+                    if (dY <= 0) {
+                        h += Math.abs(dY);
+//                        drawingY -= Math.abs(dY);
+                    } else if (dY >= 0) {
+                        h -= dY;
+//                        drawingY += dY;
+                    }
+
+                } else if (shape.getID().equals("Square") || shape.getID().equals("Circle")) {
+                    if (dX <= 0) {
+                        w -= Math.abs(dX);
+                        h -= Math.abs(dX);
+                    } else if (dX >= 0) {
+                        w += dX;
+                        h += dX;
+                    }
+
+                    if (dY <= 0) {
+                        h += Math.abs(dY);
+                        w += Math.abs(dY);
+                    } else if (dY >= 0) {
+                        h -= dY;
+                        w -= dY;
+                    }
+                }
+                // reposition the drawing coords
+                double drawingY = initialY - h;
+
+                shape.setDrawingY(drawingY);
+
+                shape.setWidth(w);
+                shape.setHeight(h);
+
+                shape.setCurrentX(mouseX);
+                shape.setCurrentY(mouseY);
+            }
+        } else if (mouseX - initialX <= 0) {
+            if (mouseY - initialY <= 0) {
+                // 3rd quadrant
+                shape.setWidth(0);
+                shape.setHeight(0);
+
+                double dX = mouseX - shape.getCurrentX();
+                double dY = mouseY - shape.getCurrentY();
+
+                // calculate width, height
+                if (shape.getID().equals("Rect") || shape.getID().equals("Oval")) {
+                    if (dX <= 0) {
+                        w += Math.abs(dX);
+                    } else if (dX >= 0) {
+                        w -= dX;
+                    }
+
+                    if (dY <= 0) {
+                        h += Math.abs(dY);
+                    } else if (dY >= 0) {
+                        h -= dY;
+                    }
+                } else if (shape.getID().equals("Square") || shape.getID().equals("Circle")) {
+                    if (dX <= 0) {
+                        w += Math.abs(dX);
+                        h += Math.abs(dX);
+                    } else if (dX >= 0) {
+                        w -= dX;
+                        h -= dX;
+                    }
+
+                    if (dY <= 0) {
+                        h += Math.abs(dY);
+                        w += Math.abs(dY);
+                    } else if (dY >= 0) {
+                        h -= dY;
+                        w -= dY;
+                    }
+                }
+                // reposition the drawing coords
+                double drawingX = initialX - w;
+                double drawingY = initialY - h;
+
+                shape.setWidth(w);
+                shape.setHeight(h);
+                shape.setDrawingX(drawingX);
+                shape.setDrawingY(drawingY);
+
+                shape.setCurrentX(mouseX);
+                shape.setCurrentY(mouseY);
+
+            } else if (mouseY - initialY >= 0) {
+                // 4th quadrant
+                shape.setWidth(0);
+                shape.setHeight(0);
+
+                double dX = mouseX - shape.getCurrentX();
+                double dY = mouseY - shape.getCurrentY();
+
+                // calculate width, height
+//                if (dX >= 0) {
+//                    w -= dX;
+//                } else if (dX <= 0) {
+//                    w += Math.abs(dX);
+//
+//                }
+//
+//                if (dY <= 0) {
+//                    h -= Math.abs(dY);
+//                } else if (dY >= 0) {
+//                    h += dY;
+//                }
+
+                if (shape.getID().equals("Rect") || shape.getID().equals("Oval")) {
+                    if (dX <= 0) {
+                        w += Math.abs(dX);
+                    } else if (dX >= 0) {
+                        w -= dX;
+                    }
+
+                    if (dY <= 0) {
+                        h -= Math.abs(dY);
+                    } else if (dY >= 0) {
+                        h += dY;
+                    }
+                } else if (shape.getID().equals("Square") || shape.getID().equals("Circle")) {
+                    if (dX <= 0) {
+                        w += Math.abs(dX);
+                        h += Math.abs(dX);
+                    } else if (dX >= 0) {
+                        w -= dX;
+                        h -= dX;
+                    }
+
+                    if (dY <= 0) {
+                        h -= Math.abs(dY);
+                        w -= Math.abs(dY);
+                    } else if (dY >= 0) {
+                        h += dY;
+                        w += dY;
+                    }
+                }
+                double drawingX = initialX - w;
+                shape.setDrawingX(drawingX);
+
+                shape.setWidth(w);
+                shape.setHeight(h);
+
+                shape.setCurrentX(mouseX);
+                shape.setCurrentY(mouseY);
+            }
+        }
         notifySubs();
     }
 

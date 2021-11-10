@@ -19,7 +19,7 @@ public class XLine extends XShape {
 
     @Override
     public boolean contains(double x, double y) {
-        return Math.abs(distanceFromLine(x, y)) < tolerance && dist(x, y, this.x, this.y) < length && dist(x, y, width, height) < length;
+        return Math.abs(distanceFromLine(x, y)) < tolerance && dist(x, y, this.drawingX, this.drawingY) < length && dist(x, y, width, height) < length;
     }
 
     private double distanceFromLine(double x, double y) {
