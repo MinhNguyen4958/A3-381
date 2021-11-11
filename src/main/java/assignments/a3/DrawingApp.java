@@ -18,6 +18,8 @@ public class DrawingApp extends Application {
         InteractionModel iModel = new InteractionModel();
         DrawingModel model = new DrawingModel();
         DrawingView canvas = mainView.getCanvas();
+        MiniDrawingView miniCanvas = mainView.getMiniDrawingView();
+
         mainView.setController(controller);
         mainView.setiModel(iModel);
 
@@ -25,10 +27,15 @@ public class DrawingApp extends Application {
         canvas.setiModel(iModel);
         canvas.setModel(model);
 
+        miniCanvas.setController(controller);
+        miniCanvas.setiModel(iModel);
+        miniCanvas.setModel(model);
+
         iModel.addiSub(canvas);
         iModel.addiSub(mainView);
 
-        model.addSub(mainView.getCanvas());
+        model.addSub(canvas);
+        model.addSub(miniCanvas);
 
         controller.setInteractionModel(iModel);
         controller.setModel(model);

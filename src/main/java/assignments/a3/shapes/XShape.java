@@ -16,6 +16,9 @@ public abstract class XShape {
     protected double currentX;
     protected double currentY;
 
+    //z iD
+    int z;
+
     protected double width;
     protected double height;
     protected String ID;
@@ -37,13 +40,21 @@ public abstract class XShape {
         return currentY;
     }
 
-
     public double getDrawingX() {
         return drawingX;
     }
 
     public double getDrawingY() {
         return drawingY;
+    }
+
+
+    public void setDrawingX(double drawingX) {
+        this.drawingX = drawingX;
+    }
+
+    public void setDrawingY(double drawingY) {
+        this.drawingY = drawingY;
     }
 
     public double getWidth() {
@@ -54,13 +65,6 @@ public abstract class XShape {
         return height;
     }
 
-    public void setDrawingX(double drawingX) {
-        this.drawingX = drawingX;
-    }
-
-    public void setDrawingY(double drawingY) {
-        this.drawingY = drawingY;
-    }
 
     public void setWidth(double width) {
         this.width = width;
@@ -92,11 +96,21 @@ public abstract class XShape {
         return initialY;
     }
 
+    public void setZ(int z) {
+        this.z = z;
+    }
+
+    public int getZ() {
+        return z;
+    }
+
     public XShape(double newLeft, double newTop, double newWidth, double newHeight, String ShapeID, Paint newColor) {
         initialX = newLeft;
         initialY = newTop;
+
         currentX = newLeft;
         currentY = newTop;
+
         drawingX = newLeft;
         drawingY = newTop;
 
@@ -104,6 +118,7 @@ public abstract class XShape {
         height = newHeight;
         ID = ShapeID;
         shapeColor = newColor;
+        z = 0;
     }
 
     public void resize(double newX, double newY, double dX, double dY) {
@@ -115,7 +130,7 @@ public abstract class XShape {
 
     public abstract boolean contains(double x, double y);
 
-    public abstract void move(double dX, double dY);
+    public abstract void move(double dX, double dY) ;
 
     protected double dist(double x1, double y1, double x2, double y2) {
         return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));

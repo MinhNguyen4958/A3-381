@@ -4,6 +4,7 @@ import assignments.a3.model.*;
 import assignments.a3.controller.*;
 
 
+import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -12,17 +13,31 @@ public class MainUI extends BorderPane implements InteractionModelSubscriber {
     private ShapeToolbar leftbar;
     private ColourToolbar rightbar;
     private DrawingView canvasView;
-
+    private MiniDrawingView miniDrawingView;
     InteractionModel iModel;
+
 
     public MainUI() {
         leftbar = new ShapeToolbar();
         rightbar = new ColourToolbar();
         canvasView = new DrawingView(500, 500);
-        this.setBackground(new Background( new BackgroundFill(Color.LIGHTGRAY, null, null)));
+        miniDrawingView = new MiniDrawingView(100, 100);
+        StackPane centerView = new StackPane(canvasView, miniDrawingView);
+        StackPane.setAlignment(miniDrawingView, Pos.TOP_LEFT);
+        StackPane.setAlignment(canvasView, Pos.CENTER);
+
+
         this.setLeft(leftbar);
         this.setRight(rightbar);
-        this.setCenter(canvasView);
+        this.setCenter(centerView);
+    }
+
+    public DrawingView getCanvas() {
+        return canvasView;
+    }
+
+    public MiniDrawingView getMiniDrawingView() {
+        return miniDrawingView;
     }
 
     public void setiModel(InteractionModel newiModel) {
@@ -46,7 +61,6 @@ public class MainUI extends BorderPane implements InteractionModelSubscriber {
         }));
     }
 
-    public DrawingView getCanvas() { return canvasView; }
 
     /** change the color of shapeButton's icon and border */
     @Override

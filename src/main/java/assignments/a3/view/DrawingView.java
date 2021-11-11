@@ -5,7 +5,10 @@ import assignments.a3.model.*;
 import assignments.a3.shapes.XShape;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 
@@ -23,14 +26,15 @@ public class DrawingView extends Pane implements DrawingModelSubscribers, Intera
         myCanvas = new Canvas(width, height);
         gc = myCanvas.getGraphicsContext2D();
         this.getChildren().add(myCanvas);
+        this.setBackground(new Background( new BackgroundFill(Color.LIGHTGRAY, null, null)));
 
-        myCanvas.widthProperty().addListener((observable, oldVal, newVal) -> {
-            myCanvas.setWidth(newVal.doubleValue());
+        this.widthProperty().addListener((observable, oldVal, newVal) -> {
+            myCanvas.setWidth(this.getWidth());
             draw();
         });
 
-        myCanvas.heightProperty().addListener((observable, oldVal, newVal) -> {
-            myCanvas.setHeight(newVal.doubleValue());
+        this.heightProperty().addListener((observable, oldVal, newVal) -> {
+            myCanvas.setHeight(this.getHeight());
             draw();
         });
     }
@@ -57,19 +61,21 @@ public class DrawingView extends Pane implements DrawingModelSubscribers, Intera
             switch(shape.getID()) {
                 case "Rect", "Square" -> {
                     gc.setFill(shape.getColor());
-                    gc.strokeRect(drawingX * canvasWidth , drawingY * canvasHeight, shapeWidth * canvasWidth, shapeHeight * canvasHeight);
                     gc.fillRect(drawingX * canvasWidth , drawingY * canvasHeight, shapeWidth * canvasWidth, shapeHeight * canvasHeight);
+                    gc.setStroke(Color.BLACK);
+                    gc.strokeRect(drawingX * canvasWidth , drawingY * canvasHeight, shapeWidth * canvasWidth, shapeHeight * canvasHeight);
                 }
 
                 case "Oval", "Circle" -> {
                     gc.setFill(shape.getColor());
-                    gc.strokeOval(drawingX * canvasWidth, drawingY * canvasHeight, shapeWidth * canvasWidth, shapeHeight * canvasHeight);
                     gc.fillOval(drawingX * canvasWidth, drawingY * canvasHeight, shapeWidth * canvasWidth, shapeHeight * canvasHeight);
+                    gc.setStroke(Color.BLACK);
+                    gc.strokeOval(drawingX * canvasWidth, drawingY * canvasHeight, shapeWidth * canvasWidth, shapeHeight * canvasHeight);
                 }
 
                 case "Line" -> {
                     gc.setStroke(shape.getColor());
-                    gc.strokeLine(shape.getDrawingX(), shape.getDrawingY(), shape.getWidth(), shape.getHeight());
+                    gc.strokeLine(drawingX * canvasWidth, drawingY * canvasHeight, shapeWidth * canvasWidth, shapeHeight * canvasHeight);
                 }
             }
         }
