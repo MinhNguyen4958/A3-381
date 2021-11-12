@@ -123,13 +123,6 @@ public abstract class XShape {
         z = 0;
     }
 
-    public void resize(double newX, double newY, double dX, double dY) {
-        drawingX = newX;
-        drawingY = newY;
-        width = dX;
-        height = dY;
-    }
-
     public abstract boolean contains(double x, double y);
 
     public abstract void move(double dX, double dY);

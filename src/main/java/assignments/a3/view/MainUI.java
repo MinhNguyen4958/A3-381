@@ -8,7 +8,7 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
-public class MainUI extends BorderPane implements InteractionModelSubscriber {
+public class MainUI extends BorderPane {
     private ShapeToolbar leftbar;
     private ColourToolbar rightbar;
     private DrawingView canvasView;
@@ -52,18 +52,19 @@ public class MainUI extends BorderPane implements InteractionModelSubscriber {
     public void setController(DrawingController controller) {
         rightbar.getColorButtons().forEach(button -> button.setOnMouseClicked(e ->  {
             controller.setColor(Color.valueOf(button.textProperty().get()));
+            ColorChanged();
         }));
         leftbar.getShapeButtons().forEach(button -> button.setOnMouseClicked(e -> {
             if (button.isSelected()) {
                 iModel.setButton(button);
             }
+            ColorChanged();
         }));
     }
 
 
     /** change the color of shapeButton's icon and border */
-    @Override
-    public void iModelChanged() {
+    public void ColorChanged() {
 
         // update the button border whenever the selected is changed
         leftbar.getShapeButtons().forEach(button -> {

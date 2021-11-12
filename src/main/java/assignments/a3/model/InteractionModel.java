@@ -30,12 +30,10 @@ public class InteractionModel {
 
     public void setColor(Paint newColor) {
         selectedColor = newColor;
-        notifyiSubs();
     }
 
     public void setButton(ShapeButton newButton) {
         selectedButton = newButton;
-        notifyiSubs();
     }
 
     public XShape getSelectedShape() {
@@ -54,5 +52,10 @@ public class InteractionModel {
 
     public boolean handleHit(double normX, double normY) {
         return false;
+    }
+
+    // wrapper method to draw the border and the handle around the selected shape
+    public void shapeSizeChanged() {
+        notifyiSubs();
     }
 }

@@ -81,7 +81,29 @@ public class DrawingView extends Pane implements DrawingModelSubscribers, Intera
     }
 
     private void iDraw() {
+        double canvasWidth = myCanvas.getWidth();
+        double canvasHeight = myCanvas.getHeight();
+        XShape selectedShape = iModel.getSelectedShape();
+        double[] dashPattern = {5,5};
 
+        double drawingX = selectedShape.getDrawingX();
+        double drawingY = selectedShape.getDrawingY();
+        double shapeWidth = selectedShape.getWidth();
+        double shapeHeight = selectedShape.getHeight();
+        switch (selectedShape.getID()) {
+            case "Rect", "Square", "Oval", "Circle" -> {
+                gc.setFill(Color.TRANSPARENT);
+                gc.setLineWidth(2.0);
+                gc.setLineDashes(dashPattern);
+                gc.setStroke(Color.RED);
+                gc.fillRect(drawingX * canvasWidth , drawingY * canvasHeight, shapeWidth * canvasWidth, shapeHeight * canvasHeight);
+                gc.strokeRect(drawingX * canvasWidth , drawingY * canvasHeight, shapeWidth * canvasWidth, shapeHeight * canvasHeight);
+
+                gc.setFill(Color.YELLOW);
+                gc.fillOval((drawingX + selectedShape.getWidth()) * canvasWidth, (drawingY + selectedShape.getHeight()) * canvasHeight, 0.02 * canvasWidth,  0.02 * canvasHeight);
+                gc.setStroke(Color.BLACK);
+            }
+        }
     }
 
     public void setController(DrawingController controller) {

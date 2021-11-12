@@ -14,7 +14,7 @@ public class XRectangle extends XShape {
 
     @Override
     public void move(double dX, double dY) {
-        this.drawingX += dX;
-        this.drawingY += dY;
+        this.initialX += dX;
+        this.initialY += dY;
     }
 }

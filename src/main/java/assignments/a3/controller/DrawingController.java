@@ -104,6 +104,7 @@ public class DrawingController {
         switch (currentState) {
             case INITIAL_RESIZE -> {
                 model.resizeShape(iModel.getSelectedShape(), normX, normY);
+                iModel.shapeSizeChanged();
             }
 
             case RESIZING -> {
