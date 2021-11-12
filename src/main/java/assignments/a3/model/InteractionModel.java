@@ -10,15 +10,9 @@ public class InteractionModel {
     private Paint selectedColor;
     private ShapeButton selectedButton;
     ArrayList<InteractionModelSubscriber> subs;
-    double viewWidth, viewHeight;
 
     public InteractionModel() {
         subs = new ArrayList<>();
-    }
-
-    public void setViewSize(double w, double h) {
-        viewWidth = w;
-        viewHeight = h;
     }
 
     public void addiSub(InteractionModelSubscriber newSub) {
@@ -29,7 +23,7 @@ public class InteractionModel {
         subs.forEach(sub -> sub.iModelChanged());
     }
 
-    public void setShape(XShape newShape) {
+    public void setselectedShape(XShape newShape) {
         selectedShape = newShape;
         notifyiSubs();
     }
@@ -56,5 +50,9 @@ public class InteractionModel {
 
     public void unselect() {
         selectedShape = null;
+    }
+
+    public boolean handleHit(double normX, double normY) {
+        return false;
     }
 }

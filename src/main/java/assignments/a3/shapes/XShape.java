@@ -74,7 +74,9 @@ public abstract class XShape {
         this.height = height;
     }
 
-    public String getID() { return ID; }
+    public String getID() {
+        return ID;
+    }
 
     public Paint getColor() {
         return shapeColor;
@@ -130,10 +132,9 @@ public abstract class XShape {
 
     public abstract boolean contains(double x, double y);
 
-    public abstract void move(double dX, double dY) ;
+    public abstract void move(double dX, double dY);
 
     protected double dist(double x1, double y1, double x2, double y2) {
         return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
-
 }

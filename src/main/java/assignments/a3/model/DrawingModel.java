@@ -4,6 +4,7 @@ import assignments.a3.shapes.*;
 import javafx.scene.paint.Paint;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class DrawingModel {
 
@@ -25,7 +26,7 @@ public class DrawingModel {
         subs.add(newSub);
     }
 
-    public void notifySubs() {
+    private void notifySubs() {
         subs.forEach(sub -> sub.modelChanged());
     }
 
@@ -48,232 +49,7 @@ public class DrawingModel {
 
     public void addShape(XShape shape) {
         shapes.add(shape);
-        notifySubs();
-    }
-
-    public void resizeShape(XShape shape, double mouseX, double mouseY) {
-        double w = shape.getWidth();
-        double h = shape.getHeight();
-
-        double initialX = shape.getInitialX();
-        double initialY = shape.getInitialY();
-
-        if (mouseX - initialX >= 0) {
-            if (mouseY - initialY >= 0) {
-                // 1st quadrant
-                shape.setWidth(0);
-                shape.setHeight(0);
-                double dX = mouseX - shape.getCurrentX();
-                double dY = mouseY - shape.getCurrentY();
-
-                if (!shape.getID().equals("Line")) {
-                    if (shape.getID().equals("Rect") || shape.getID().equals("Oval")) {
-                        if (dX >= 0) {
-                            w += dX;
-                        } else if (dX <= 0) {
-                            w -= Math.abs(dX);
-                        }
-
-                        if (dY >= 0) {
-                            h += dY;
-                        } else if (dY <= 0) {
-                            h -= Math.abs(dY);
-                        }
-                    } else if (shape.getID().equals("Square") || shape.getID().equals("Circle")) {
-                        if (dX >= 0) {
-                            w += dX;
-                            h += dX;
-                        } else if (dX <= 0) {
-                            w -= Math.abs(dX);
-                            h -= Math.abs(dX);
-                        }
-
-                        if (dY >= 0) {
-                            h += dY;
-                            w += dY;
-                        } else if (dY <= 0) {
-                            h -= Math.abs(dY);
-                            w -= Math.abs(dY);
-                        }
-                    }
-                    shape.setWidth(w);
-                    shape.setHeight(h);
-                    shape.setCurrentX(mouseX);
-                    shape.setCurrentY(mouseY);
-                // we selected the line button
-                } else {
-                    shape.setWidth(mouseX);
-                    shape.setHeight(mouseY);
-                }
-
-                // the drawing coords should be the same as initials coords for this quadrant
-
-            } else if (mouseY - initialY <= 0) {
-
-                // 2nd quadrant
-                shape.setWidth(0);
-                shape.setHeight(0);
-
-                double dX = mouseX - shape.getCurrentX();
-                double dY = mouseY - shape.getCurrentY();
-
-                if (!shape.getID().equals("Line")) {
-                    // calculate width, height and determine the drawing location of Y coord
-                    if (shape.getID().equals("Rect") || shape.getID().equals("Oval")) {
-                        if (dX <= 0) {
-                            w -= Math.abs(dX);
-                        } else if (dX >= 0) {
-                            w += dX;
-                        }
-                        if (dY <= 0) {
-                            h += Math.abs(dY);
-//                        drawingY -= Math.abs(dY);
-                        } else if (dY >= 0) {
-                            h -= dY;
-//                        drawingY += dY;
-                        }
-
-                    } else if (shape.getID().equals("Square") || shape.getID().equals("Circle")) {
-                        if (dX <= 0) {
-                            w -= Math.abs(dX);
-                            h -= Math.abs(dX);
-                        } else if (dX >= 0) {
-                            w += dX;
-                            h += dX;
-                        }
-
-                        if (dY <= 0) {
-                            h += Math.abs(dY);
-                            w += Math.abs(dY);
-                        } else if (dY >= 0) {
-                            h -= dY;
-                            w -= dY;
-                        }
-                    }
-                    // reposition the drawing coords
-                    double drawingY = initialY - h;
-
-                    shape.setDrawingY(drawingY);
-
-                    shape.setWidth(w);
-                    shape.setHeight(h);
-
-                    shape.setCurrentX(mouseX);
-                    shape.setCurrentY(mouseY);
-                } else {
-                    shape.setWidth(mouseX);
-                    shape.setHeight(mouseY);
-                }
-            }
-        } else if (mouseX - initialX <= 0) {
-            if (mouseY - initialY <= 0) {
-                // 3rd quadrant
-                shape.setWidth(0);
-                shape.setHeight(0);
-
-                double dX = mouseX - shape.getCurrentX();
-                double dY = mouseY - shape.getCurrentY();
-
-                if (!shape.getID().equals("Line")) {
-                    // calculate width, height
-                    if (shape.getID().equals("Rect") || shape.getID().equals("Oval")) {
-                        if (dX <= 0) {
-                            w += Math.abs(dX);
-                        } else if (dX >= 0) {
-                            w -= dX;
-                        }
-
-                        if (dY <= 0) {
-                            h += Math.abs(dY);
-                        } else if (dY >= 0) {
-                            h -= dY;
-                        }
-                    } else if (shape.getID().equals("Square") || shape.getID().equals("Circle")) {
-                        if (dX <= 0) {
-                            w += Math.abs(dX);
-                            h += Math.abs(dX);
-                        } else if (dX >= 0) {
-                            w -= dX;
-                            h -= dX;
-                        }
-
-                        if (dY <= 0) {
-                            h += Math.abs(dY);
-                            w += Math.abs(dY);
-                        } else if (dY >= 0) {
-                            h -= dY;
-                            w -= dY;
-                        }
-                    }
-                    // reposition the drawing coords
-                    double drawingX = initialX - w;
-                    double drawingY = initialY - h;
-
-                    shape.setWidth(w);
-                    shape.setHeight(h);
-                    shape.setDrawingX(drawingX);
-                    shape.setDrawingY(drawingY);
-
-                    shape.setCurrentX(mouseX);
-                    shape.setCurrentY(mouseY);
-                } else {
-                    shape.setWidth(mouseX);
-                    shape.setHeight(mouseY);
-                }
-
-            } else if (mouseY - initialY >= 0) {
-                // 4th quadrant
-                shape.setWidth(0);
-                shape.setHeight(0);
-
-                double dX = mouseX - shape.getCurrentX();
-                double dY = mouseY - shape.getCurrentY();
-
-                // calculate width, height
-                if (!shape.getID().equals("Line")) {
-                    if (shape.getID().equals("Rect") || shape.getID().equals("Oval")) {
-                        if (dX <= 0) {
-                            w += Math.abs(dX);
-                        } else if (dX >= 0) {
-                            w -= dX;
-                        }
-
-                        if (dY <= 0) {
-                            h -= Math.abs(dY);
-                        } else if (dY >= 0) {
-                            h += dY;
-                        }
-                    } else if (shape.getID().equals("Square") || shape.getID().equals("Circle")) {
-                        if (dX <= 0) {
-                            w += Math.abs(dX);
-                            h += Math.abs(dX);
-                        } else if (dX >= 0) {
-                            w -= dX;
-                            h -= dX;
-                        }
-
-                        if (dY <= 0) {
-                            h -= Math.abs(dY);
-                            w -= Math.abs(dY);
-                        } else if (dY >= 0) {
-                            h += dY;
-                            w += dY;
-                        }
-                    }
-                    double drawingX = initialX - w;
-                    shape.setDrawingX(drawingX);
-
-                    shape.setWidth(w);
-                    shape.setHeight(h);
-
-                    shape.setCurrentX(mouseX);
-                    shape.setCurrentY(mouseY);
-                } else {
-                    shape.setWidth(mouseX);
-                    shape.setHeight(mouseY);
-                }
-            }
-        }
+        shapes.sort(Comparator.comparingInt(XShape::getZ));
         notifySubs();
     }
 
@@ -292,5 +68,223 @@ public class DrawingModel {
 
     public boolean hitEdge(double normX, double normY) {
         return false;
+    }
+
+    public void resizeShape(XShape selectedShape, double mouseX, double mouseY) {
+        double w = selectedShape.getWidth();
+        double h = selectedShape.getHeight();
+
+        double initialX = selectedShape.getInitialX();
+        double initialY = selectedShape.getInitialY();
+
+        if (mouseX - initialX >= 0) {
+            if (mouseY - initialY >= 0) {
+                // 1st quadrant
+                double dX = mouseX - selectedShape.getCurrentX();
+                double dY = mouseY - selectedShape.getCurrentY();
+
+                if (!selectedShape.getID().equals("Line")) {
+                    // we check the distance between currentX/Y and mouseX/Y
+                    if (selectedShape.getID().equals("Rect") || selectedShape.getID().equals("Oval")) {
+                        // if both x and y coordinates increase to the right, increment width and height
+                        if (dX >= 0) {
+                            w += dX;
+                        } else if (dX <= 0) {
+                            w -= Math.abs(dX);
+                        }
+
+                        if (dY >= 0) {
+                            h += dY;
+                        } else if (dY <= 0) {
+                            h -= Math.abs(dY);
+                        }
+                    } else if (selectedShape.getID().equals("Square") || selectedShape.getID().equals("Circle")) {
+                        if (dX >= 0) {
+                            w += dX;
+                            h += dX;
+                        } else if (dX <= 0) {
+                            w -= Math.abs(dX);
+                            h -= Math.abs(dX);
+                        }
+
+                        if (dY >= 0) {
+                            h += dY;
+                            w += dY;
+
+                        } else if (dY <= 0) {
+                            h -= Math.abs(dY);
+                            w -= Math.abs(dY);
+                        }
+                    }
+                    selectedShape.setWidth(w);
+                    selectedShape.setHeight(h);
+                    selectedShape.setCurrentX(mouseX);
+                    selectedShape.setCurrentY(mouseY);
+
+                    // we selected the line button
+                } else {
+                    selectedShape.setWidth(mouseX);
+                    selectedShape.setHeight(mouseY);
+                }
+
+                // the drawing coords should be the same as initials coords for this quadrant
+
+            } else if (mouseY - initialY <= 0) {
+
+                // 2nd quadrant
+                double dX = mouseX - selectedShape.getCurrentX();
+                double dY = mouseY - selectedShape.getCurrentY();
+
+                if (!selectedShape.getID().equals("Line")) {
+                    // calculate width, height and determine the drawing location of Y coord
+                    if (selectedShape.getID().equals("Rect") || selectedShape.getID().equals("Oval")) {
+
+                        if (dX <= 0) {
+                            w -= Math.abs(dX);
+                        } else if (dX >= 0) {
+                            w += dX;
+                        }
+                        if (dY <= 0) {
+                            h += Math.abs(dY);
+                        } else if (dY >= 0) {
+                            h -= dY;
+                        }
+
+                    } else if (selectedShape.getID().equals("Square") || selectedShape.getID().equals("Circle")) {
+                        if (dX <= 0) {
+                            w -= Math.abs(dX);
+                            h -= Math.abs(dX);
+                        } else if (dX >= 0) {
+                            w += dX;
+                            h += dX;
+                        }
+
+                        if (dY <= 0) {
+                            h += Math.abs(dY);
+                            w += Math.abs(dY);
+                        } else if (dY >= 0) {
+                            h -= dY;
+                            w -= dY;
+                        }
+                    }
+                    // reposition the drawing coords
+                    double drawingY = initialY - h;
+
+                    selectedShape.setDrawingY(drawingY);
+
+                    selectedShape.setWidth(w);
+                    selectedShape.setHeight(h);
+
+                    selectedShape.setCurrentX(mouseX);
+                    selectedShape.setCurrentY(mouseY);
+                } else {
+                    selectedShape.setWidth(mouseX);
+                    selectedShape.setHeight(mouseY);
+                }
+            }
+        } else if (mouseX - initialX <= 0) {
+            if (mouseY - initialY <= 0) {
+                // 3rd quadrant
+                double dX = mouseX - selectedShape.getCurrentX();
+                double dY = mouseY - selectedShape.getCurrentY();
+
+                if (!selectedShape.getID().equals("Line")) {
+                    // calculate width, height
+                    if (selectedShape.getID().equals("Rect") || selectedShape.getID().equals("Oval")) {
+                        if (dX <= 0) {
+                            w += Math.abs(dX);
+                        } else if (dX >= 0) {
+                            w -= dX;
+                        }
+
+                        if (dY <= 0) {
+                            h += Math.abs(dY);
+                        } else if (dY >= 0) {
+                            h -= dY;
+                        }
+                    } else if (selectedShape.getID().equals("Square") || selectedShape.getID().equals("Circle")) {
+                        if (dX <= 0) {
+                            w += Math.abs(dX);
+                            h += Math.abs(dX);
+                        } else if (dX >= 0) {
+                            w -= dX;
+                            h -= dX;
+                        }
+
+                        if (dY <= 0) {
+                            h += Math.abs(dY);
+                            w += Math.abs(dY);
+                        } else if (dY >= 0) {
+                            h -= dY;
+                            w -= dY;
+                        }
+                    }
+                    // reposition the drawing coords
+                    double drawingX = initialX - w;
+                    double drawingY = initialY - h;
+
+                    selectedShape.setWidth(w);
+                    selectedShape.setHeight(h);
+                    selectedShape.setDrawingX(drawingX);
+                    selectedShape.setDrawingY(drawingY);
+
+                    selectedShape.setCurrentX(mouseX);
+                    selectedShape.setCurrentY(mouseY);
+                } else {
+                    selectedShape.setWidth(mouseX);
+                    selectedShape.setHeight(mouseY);
+                }
+
+            } else if (mouseY - initialY >= 0) {
+                // 4th quadrant
+                double dX = mouseX - selectedShape.getCurrentX();
+                double dY = mouseY - selectedShape.getCurrentY();
+
+                // calculate width, height
+                if (!selectedShape.getID().equals("Line")) {
+                    if (selectedShape.getID().equals("Rect") || selectedShape.getID().equals("Oval")) {
+                        if (dX <= 0) {
+                            w += Math.abs(dX);
+                        } else if (dX >= 0) {
+                            w -= dX;
+                        }
+
+                        if (dY <= 0) {
+                            h -= Math.abs(dY);
+                        } else if (dY >= 0) {
+                            h += dY;
+                        }
+                    } else if (selectedShape.getID().equals("Square") || selectedShape.getID().equals("Circle")) {
+                        if (dX <= 0) {
+                            w += Math.abs(dX);
+                            h += Math.abs(dX);
+                        } else if (dX >= 0) {
+                            w -= dX;
+                            h -= dX;
+                        }
+
+                        if (dY <= 0) {
+                            h -= Math.abs(dY);
+                            w -= Math.abs(dY);
+                        } else if (dY >= 0) {
+                            h += dY;
+                            w += dY;
+                        }
+                    }
+                    double drawingX = initialX - w;
+                    selectedShape.setDrawingX(drawingX);
+
+                    selectedShape.setWidth(w);
+                    selectedShape.setHeight(h);
+
+                    selectedShape.setCurrentX(mouseX);
+                    selectedShape.setCurrentY(mouseY);
+                } else {
+                    selectedShape.setWidth(mouseX);
+                    selectedShape.setHeight(mouseY);
+                }
+            }
+        }
+        notifySubs();
     }
 }

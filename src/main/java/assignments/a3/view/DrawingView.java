@@ -41,7 +41,6 @@ public class DrawingView extends Pane implements DrawingModelSubscribers, Intera
 
     public void setiModel(InteractionModel newiModel) {
         iModel = newiModel;
-        iModel.setViewSize(myCanvas.getWidth(), myCanvas.getHeight());
     }
 
     public void setModel(DrawingModel newModel) {
@@ -81,6 +80,10 @@ public class DrawingView extends Pane implements DrawingModelSubscribers, Intera
         }
     }
 
+    private void iDraw() {
+
+    }
+
     public void setController(DrawingController controller) {
         myCanvas.setOnMousePressed(e -> controller.handlePressed(e.getX() / width, e.getY() / height, e));
         myCanvas.setOnMouseDragged(e -> controller.handleDragged(e.getX() / width, e.getY() / height, e, iModel.getSelectedButton().getShapeID()));
@@ -95,6 +98,6 @@ public class DrawingView extends Pane implements DrawingModelSubscribers, Intera
 
     @Override
     public void iModelChanged() {
-
+        iDraw();
     }
 }

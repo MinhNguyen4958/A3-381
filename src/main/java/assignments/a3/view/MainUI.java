@@ -5,7 +5,6 @@ import assignments.a3.controller.*;
 
 
 import javafx.geometry.Pos;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 

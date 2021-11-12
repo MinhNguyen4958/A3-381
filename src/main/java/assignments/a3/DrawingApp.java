@@ -32,6 +32,7 @@ public class DrawingApp extends Application {
         miniCanvas.setModel(model);
 
         iModel.addiSub(canvas);
+        iModel.addiSub(miniCanvas);
         iModel.addiSub(mainView);
 
         model.addSub(canvas);
