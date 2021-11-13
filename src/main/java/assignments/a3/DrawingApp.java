@@ -41,6 +41,7 @@ public class DrawingApp extends Application {
         controller.setModel(model);
 
         Scene scene = new Scene(mainView, 625, 500);
+//        scene.setOnKeyPressed();
         stage.setTitle("Drawing App");
         stage.setScene(scene);
         stage.show();

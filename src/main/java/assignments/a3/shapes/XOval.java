@@ -9,7 +9,6 @@ public class XOval extends XShape {
 
     @Override
     public boolean contains(double clickX, double clickY) {
-        //TODO
 
         // oval = circle's width is scaled by X dimension
         if (width > height) {
@@ -19,7 +18,6 @@ public class XOval extends XShape {
             double temp_width = width * inverse;
             // move the clickX to the  ellipse's temp circle
             double scaledX = clickX * inverse;
-            System.out.println(scaledX);
             double radius = temp_width/ 2;
             return dist(scaledX, clickY, drawingX + radius, drawingY + radius) <= radius;
         }

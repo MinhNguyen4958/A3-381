@@ -124,8 +124,8 @@ public abstract class XShape {
     public abstract boolean contains(double clickX, double clickY);
 
     public void move(double mouseX, double mouseY) {
-        drawingX += mouseX - currentX;
-        drawingY += mouseY - currentY;
+        initialX = drawingX += mouseX - currentX;
+        initialY = drawingY += mouseY - currentY;
         setCurrentX(mouseX);
         setCurrentY(mouseY);
     }

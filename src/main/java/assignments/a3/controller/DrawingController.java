@@ -60,13 +60,19 @@ public class DrawingController {
             case SELECTED -> {
                 boolean anotherHit = model.contains(normX, normY);
                 boolean handleHit = iModel.handleHit(normX, normY);
-                if (anotherHit) {
+                if (anotherHit && !handleHit) {
                     /**
                      * context: on another shape
                      * side effect: set new shape selection
                      */
                     iModel.setselectedShape(model.whichShape(normX, normY), model);
                     //stay on this state
+                } else if (handleHit) {
+                    /**
+                     * context:  on the handle
+                     * side effect: save the current mouseX/Y
+                     */
+                    currentState = State.RESIZING;
                 } else {
                     /**
                      * context: none (on background)
@@ -74,13 +80,6 @@ public class DrawingController {
                      */
                     //move to prepare create
                     currentState = State.PREPARE_CREATE;
-                }
-
-                if (handleHit) {
-                    currentState = State.RESIZING;
-                } else {
-//                    currentState = State
-                    currentState = State.MOVING;
                 }
             }
         }
@@ -114,6 +113,12 @@ public class DrawingController {
 
             case RESIZING -> {
                 model.resizeShape(iModel.getSelectedShape(), normX, normY);
+            }
+
+            case SELECTED -> {
+                if (!iModel.handleHit(normX, normY)) {
+                    currentState = State.MOVING;
+                }
             }
 
             case MOVING -> {

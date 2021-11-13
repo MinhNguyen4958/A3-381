@@ -95,14 +95,9 @@ public class DrawingView extends Pane implements DrawingModelSubscribers, Intera
                         gc.strokeRect(drawingX * canvasWidth, drawingY * canvasHeight, shapeWidth * canvasWidth, shapeHeight * canvasHeight);
 
 
-                        gc.setFill(Color.YELLOW);
-                        gc.setStroke(Color.BLACK);
-                        gc.setLineDashes(null);
-                        gc.setLineWidth(1);
-                        iModel.setHandleX((drawingX + shapeWidth - radius) * canvasWidth);
-                        iModel.setHandleY((drawingY + shapeHeight - radius) * canvasHeight);
-                        gc.fillOval(iModel.getHandleX(), iModel.getHandleY(), iModel.getHandleRadius() * 2 * canvasWidth, iModel.getHandleRadius() * 2 * canvasHeight);
-                        gc.strokeOval(iModel.getHandleX(), iModel.getHandleY(), iModel.getHandleRadius() * 2 * canvasWidth, iModel.getHandleRadius() * 2 *  canvasHeight);
+                        iModel.setHandleX((drawingX + shapeWidth - radius));
+                        iModel.setHandleY((drawingY + shapeHeight - radius));
+
                     }
                     case "Line" -> {
                         double[] dashPattern = {5, 5};
@@ -111,18 +106,17 @@ public class DrawingView extends Pane implements DrawingModelSubscribers, Intera
                         gc.setLineWidth(1.5);
                         gc.strokeLine(drawingX * canvasWidth, drawingY * canvasHeight, shapeWidth * canvasWidth, shapeHeight * canvasHeight);
 
-                        gc.setFill(Color.YELLOW);
-                        gc.setStroke(Color.BLACK);
-                        gc.setLineWidth(1);
-                        gc.setLineDashes(null);
-                        iModel.setHandleX((shapeWidth - radius) * canvasWidth);
-                        iModel.setHandleY((shapeHeight - radius) * canvasHeight);
-                        gc.fillOval(iModel.getHandleX(), iModel.getHandleY(), iModel.getHandleRadius() * 2 * canvasWidth, iModel.getHandleRadius() * 2 * canvasHeight);
-                        gc.strokeOval(iModel.getHandleX(), iModel.getHandleY(), iModel.getHandleRadius() * 2 * canvasWidth, iModel.getHandleRadius() * 2 * canvasHeight);
 
-
+                        iModel.setHandleX((shapeWidth - radius));
+                        iModel.setHandleY((shapeHeight - radius));
                     }
                 }
+                gc.setFill(Color.YELLOW);
+                gc.setStroke(Color.BLACK);
+                gc.setLineWidth(1);
+                gc.setLineDashes(null);
+                gc.fillOval(iModel.getHandleX() * canvasWidth, iModel.getHandleY() * canvasHeight, iModel.getHandleRadius() * 2 * canvasWidth, iModel.getHandleRadius() * 2 * canvasHeight);
+                gc.strokeOval(iModel.getHandleX() * canvasWidth, iModel.getHandleY() * canvasHeight, iModel.getHandleRadius() * 2 * canvasWidth, iModel.getHandleRadius() * 2 * canvasHeight);
             }
         }
     }
