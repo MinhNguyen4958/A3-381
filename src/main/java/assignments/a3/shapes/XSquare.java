@@ -9,12 +9,7 @@ public class XSquare extends XShape {
     }
 
     @Override
-    public boolean contains(double x, double y) {
-        return false;
-    }
-
-    @Override
-    public void move(double dX, double dY) {
-
+    public boolean contains(double clickX, double clickY) {
+        return clickX >= this.drawingX && clickX <= this.drawingX + this.width && clickY >= this.drawingY && clickY <= this.drawingY + this.height;
     }
 }

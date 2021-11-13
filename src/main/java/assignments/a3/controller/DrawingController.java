@@ -10,7 +10,7 @@ public class DrawingController {
     DrawingModel model;
     double initialX, initialY;
 
-    protected enum State { READY, PREPARE_CREATE, RESIZING, SELECTED, MOVING, INITIAL_RESIZE }
+    protected enum State { READY, PREPARE_CREATE, RESIZING, SELECTED, MOVING }
 
     private State currentState;
 
@@ -42,9 +42,10 @@ public class DrawingController {
                  */
                 boolean hit = model.contains(normX, normY);
                 if (hit) {
-                    iModel.setselectedShape(model.whichShape(normX, normY));
+                    iModel.setselectedShape(model.whichShape(normX, normY), model);
                     // move to next state
                     currentState = State.SELECTED;
+
                 } else {
                     /**
                      * context: none
@@ -58,12 +59,13 @@ public class DrawingController {
 
             case SELECTED -> {
                 boolean anotherHit = model.contains(normX, normY);
+                boolean handleHit = iModel.handleHit(normX, normY);
                 if (anotherHit) {
                     /**
                      * context: on another shape
                      * side effect: set new shape selection
                      */
-                    iModel.setselectedShape(model.whichShape(normX, normY));
+                    iModel.setselectedShape(model.whichShape(normX, normY), model);
                     //stay on this state
                 } else {
                     /**
@@ -72,6 +74,13 @@ public class DrawingController {
                      */
                     //move to prepare create
                     currentState = State.PREPARE_CREATE;
+                }
+
+                if (handleHit) {
+                    currentState = State.RESIZING;
+                } else {
+//                    currentState = State
+                    currentState = State.MOVING;
                 }
             }
         }
@@ -89,7 +98,7 @@ public class DrawingController {
                 currentState = State.READY;
             }
 
-            case RESIZING, MOVING, INITIAL_RESIZE -> {
+            case RESIZING, MOVING -> {
                 /**
                  * context: none
                  * side effects: none
@@ -102,28 +111,15 @@ public class DrawingController {
 
     public void handleDragged(double normX, double normY, MouseEvent event, String shapeID) {
         switch (currentState) {
-            case INITIAL_RESIZE -> {
-                model.resizeShape(iModel.getSelectedShape(), normX, normY);
-                iModel.shapeSizeChanged();
-            }
 
             case RESIZING -> {
-                /**
-                 * context: on selected shape's handle
-                 * side effect: resize the shape
-                 */
-                boolean handleHit = iModel.handleHit(normX, normY);
-                if (handleHit) {
-                    model.resizeShape(iModel.getSelectedShape(), normX, normY);
-                } else {
-                    currentState = State.MOVING;
-                }
-                // keep the current state
+                model.resizeShape(iModel.getSelectedShape(), normX, normY);
             }
 
             case MOVING -> {
                 model.moveShape(iModel.getSelectedShape(), normX, normY);
             }
+
 
             case PREPARE_CREATE -> {
                 /**
@@ -131,9 +127,9 @@ public class DrawingController {
                  * side effect:
                  */
                 XShape newShape = model.createShape(initialX, initialY, 0, 0, iModel.getSelectedButton().getShapeID(), iModel.getSelectedColor());
-                iModel.setselectedShape(newShape);
                 model.addShape(newShape);
-                currentState = State.INITIAL_RESIZE;
+                iModel.setselectedShape(newShape, model);
+                currentState = State.RESIZING;
             }
 
         }

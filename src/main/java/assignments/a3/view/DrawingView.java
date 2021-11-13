@@ -47,7 +47,7 @@ public class DrawingView extends Pane implements DrawingModelSubscribers, Intera
         model = newModel;
     }
 
-    private void draw() {
+    protected void draw() {
         double canvasWidth = myCanvas.getWidth();
         double canvasHeight = myCanvas.getHeight();
         gc.clearRect(0, 0, canvasWidth, canvasHeight);
@@ -57,51 +57,72 @@ public class DrawingView extends Pane implements DrawingModelSubscribers, Intera
             double drawingY = shape.getDrawingY();
             double shapeWidth = shape.getWidth();
             double shapeHeight = shape.getHeight();
-            switch(shape.getID()) {
+            String ID = shape.getID();
+            switch (ID) {
                 case "Rect", "Square" -> {
                     gc.setFill(shape.getColor());
-                    gc.fillRect(drawingX * canvasWidth , drawingY * canvasHeight, shapeWidth * canvasWidth, shapeHeight * canvasHeight);
+                    gc.fillRect(drawingX * canvasWidth, drawingY * canvasHeight, shapeWidth * canvasWidth, shapeHeight * canvasHeight);
                     gc.setStroke(Color.BLACK);
-                    gc.strokeRect(drawingX * canvasWidth , drawingY * canvasHeight, shapeWidth * canvasWidth, shapeHeight * canvasHeight);
+                    gc.setLineDashes(null);
+                    gc.strokeRect(drawingX * canvasWidth, drawingY * canvasHeight, shapeWidth * canvasWidth, shapeHeight * canvasHeight);
                 }
 
                 case "Oval", "Circle" -> {
                     gc.setFill(shape.getColor());
                     gc.fillOval(drawingX * canvasWidth, drawingY * canvasHeight, shapeWidth * canvasWidth, shapeHeight * canvasHeight);
                     gc.setStroke(Color.BLACK);
+                    gc.setLineDashes(null);
                     gc.strokeOval(drawingX * canvasWidth, drawingY * canvasHeight, shapeWidth * canvasWidth, shapeHeight * canvasHeight);
                 }
 
                 case "Line" -> {
                     gc.setStroke(shape.getColor());
+                    gc.setLineDashes(null);
                     gc.strokeLine(drawingX * canvasWidth, drawingY * canvasHeight, shapeWidth * canvasWidth, shapeHeight * canvasHeight);
                 }
             }
-        }
-    }
 
-    private void iDraw() {
-        double canvasWidth = myCanvas.getWidth();
-        double canvasHeight = myCanvas.getHeight();
-        XShape selectedShape = iModel.getSelectedShape();
-        double[] dashPattern = {5,5};
+            if (shape == iModel.getSelectedShape()) {
+                double radius = iModel.getHandleRadius();
+                switch (ID) {
+                    case "Rect", "Square", "Oval", "Circle" -> {
+                        double[] dashPattern = {5, 5};
+                        gc.setFill(Color.TRANSPARENT);
+                        gc.setLineWidth(2.5);
+                        gc.setLineDashes(dashPattern);
+                        gc.setStroke(Color.RED);
+                        gc.fillRect(drawingX * canvasWidth, drawingY * canvasHeight, shapeWidth * canvasWidth, shapeHeight * canvasHeight);
+                        gc.strokeRect(drawingX * canvasWidth, drawingY * canvasHeight, shapeWidth * canvasWidth, shapeHeight * canvasHeight);
 
-        double drawingX = selectedShape.getDrawingX();
-        double drawingY = selectedShape.getDrawingY();
-        double shapeWidth = selectedShape.getWidth();
-        double shapeHeight = selectedShape.getHeight();
-        switch (selectedShape.getID()) {
-            case "Rect", "Square", "Oval", "Circle" -> {
-                gc.setFill(Color.TRANSPARENT);
-                gc.setLineWidth(2.0);
-                gc.setLineDashes(dashPattern);
-                gc.setStroke(Color.RED);
-                gc.fillRect(drawingX * canvasWidth , drawingY * canvasHeight, shapeWidth * canvasWidth, shapeHeight * canvasHeight);
-                gc.strokeRect(drawingX * canvasWidth , drawingY * canvasHeight, shapeWidth * canvasWidth, shapeHeight * canvasHeight);
 
-                gc.setFill(Color.YELLOW);
-                gc.fillOval((drawingX + selectedShape.getWidth()) * canvasWidth, (drawingY + selectedShape.getHeight()) * canvasHeight, 0.02 * canvasWidth,  0.02 * canvasHeight);
-                gc.setStroke(Color.BLACK);
+                        gc.setFill(Color.YELLOW);
+                        gc.setStroke(Color.BLACK);
+                        gc.setLineDashes(null);
+                        gc.setLineWidth(1);
+                        iModel.setHandleX((drawingX + shapeWidth - radius) * canvasWidth);
+                        iModel.setHandleY((drawingY + shapeHeight - radius) * canvasHeight);
+                        gc.fillOval(iModel.getHandleX(), iModel.getHandleY(), iModel.getHandleRadius() * 2 * canvasWidth, iModel.getHandleRadius() * 2 * canvasHeight);
+                        gc.strokeOval(iModel.getHandleX(), iModel.getHandleY(), iModel.getHandleRadius() * 2 * canvasWidth, iModel.getHandleRadius() * 2 *  canvasHeight);
+                    }
+                    case "Line" -> {
+                        double[] dashPattern = {5, 5};
+                        gc.setLineDashes(dashPattern);
+                        gc.setStroke(Color.RED);
+                        gc.setLineWidth(1.5);
+                        gc.strokeLine(drawingX * canvasWidth, drawingY * canvasHeight, shapeWidth * canvasWidth, shapeHeight * canvasHeight);
+
+                        gc.setFill(Color.YELLOW);
+                        gc.setStroke(Color.BLACK);
+                        gc.setLineWidth(1);
+                        gc.setLineDashes(null);
+                        iModel.setHandleX((shapeWidth - radius) * canvasWidth);
+                        iModel.setHandleY((shapeHeight - radius) * canvasHeight);
+                        gc.fillOval(iModel.getHandleX(), iModel.getHandleY(), iModel.getHandleRadius() * 2 * canvasWidth, iModel.getHandleRadius() * 2 * canvasHeight);
+                        gc.strokeOval(iModel.getHandleX(), iModel.getHandleY(), iModel.getHandleRadius() * 2 * canvasWidth, iModel.getHandleRadius() * 2 * canvasHeight);
+
+
+                    }
+                }
             }
         }
     }
@@ -111,6 +132,7 @@ public class DrawingView extends Pane implements DrawingModelSubscribers, Intera
         myCanvas.setOnMouseDragged(e -> controller.handleDragged(e.getX() / width, e.getY() / height, e, iModel.getSelectedButton().getShapeID()));
         myCanvas.setOnMouseMoved(e -> controller.handleMoved(e.getX() / width, e.getY() / height, e));
         myCanvas.setOnMouseReleased(e -> controller.handleReleased(e.getX() / width, e.getY() / height, e));
+//        myCanvas.setOnKeyPressed();
     }
 
     @Override
@@ -120,6 +142,6 @@ public class DrawingView extends Pane implements DrawingModelSubscribers, Intera
 
     @Override
     public void iModelChanged() {
-        iDraw();
+        draw();
     }
 }

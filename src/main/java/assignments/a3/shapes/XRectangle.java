@@ -8,13 +8,7 @@ public class XRectangle extends XShape {
         super(newX, newY, newWidth, newHeight, shapeID, color);
     }
     @Override
-    public boolean contains(double x, double y) {
-        return x >= this.drawingX && x <= this.drawingX + this.width && y >= this.drawingY && y <=this.drawingY + this.height;
-    }
-
-    @Override
-    public void move(double dX, double dY) {
-        this.initialX += dX;
-        this.initialY += dY;
+    public boolean contains(double clickX, double clickY) {
+        return clickX >= this.drawingX && clickX <= this.drawingX + this.width && clickY >= this.drawingY && clickY <=this.drawingY + this.height;
     }
 }

@@ -82,14 +82,6 @@ public abstract class XShape {
         return shapeColor;
     }
 
-    public void setInitialX(double initialX) {
-        this.initialX = initialX;
-    }
-
-    public void setInitialY(double initialY) {
-        this.initialY = initialY;
-    }
-
     public double getInitialX() {
         return initialX;
     }
@@ -107,27 +99,34 @@ public abstract class XShape {
     }
 
     public XShape(double newLeft, double newTop, double newWidth, double newHeight, String ShapeID, Paint newColor) {
+        // initial click for Cartesian Plane reference
         initialX = newLeft;
         initialY = newTop;
 
+        // current mouseX/Y
         currentX = newLeft;
         currentY = newTop;
 
+        // the drawing coordinates for GraphicsContext
         drawingX = newLeft;
         drawingY = newTop;
 
         width = newWidth;
         height = newHeight;
+
         ID = ShapeID;
         shapeColor = newColor;
+
+        // Z-ordering ID
         z = 0;
     }
 
-    public abstract boolean contains(double x, double y);
+    public abstract boolean contains(double clickX, double clickY);
 
-    public abstract void move(double dX, double dY);
-
-    protected double dist(double x1, double y1, double x2, double y2) {
-        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    public void move(double mouseX, double mouseY) {
+        drawingX += mouseX - currentX;
+        drawingY += mouseY - currentY;
+        setCurrentX(mouseX);
+        setCurrentY(mouseY);
     }
 }

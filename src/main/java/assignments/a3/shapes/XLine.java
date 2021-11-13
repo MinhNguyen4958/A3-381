@@ -8,25 +8,29 @@ public class XLine extends XShape {
     private double tolerance;
 
     public XLine(double x1, double y1, double x2, double y2, String shapeID, Paint color) {
-        // for lines left = x1, top = y1, width = x2, height = y2
+        // for lines drawingX = x1, drawingY = y1, width = x2, height = y2
         super(x1, y1, x2, y2, shapeID, color);
-        tolerance = 10;
-        length = dist(x1, y1, x2, y2);
-        ratioA = (y1 -y2) / length;
-        ratioB = (x2 -x1) / length;
-        ratioC = -1 * ((y1 - y2) * x1 + (x2 - x1) * y1) / length;
+
     }
 
     @Override
-    public boolean contains(double x, double y) {
-        return Math.abs(distanceFromLine(x, y)) < tolerance && dist(x, y, this.drawingX, this.drawingY) < length && dist(x, y, width, height) < length;
+    public boolean contains(double clickX, double clickY) {
+        // for lines drawingX = x1, drawingY = y1, width = x2, height = y2
+        length = dist(drawingX, drawingY, width, height);
+        ratioA = (drawingY - height) / length;
+        ratioB = (width - drawingX) / length;
+        ratioC = -1 * ((drawingY - height) * drawingX + (width - drawingX) * drawingY) / length;
+        return Math.abs(distanceFromLine(clickX, clickY)) < 0.03;
     }
 
     private double distanceFromLine(double x, double y) {
         return ratioA * x + ratioB * y + ratioC;
     }
 
+    private double dist(double x1, double y1, double x2, double y2) {
+        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    }
     @Override
-    public void move(double dX, double dY) {
+    public void move(double mouseX, double mouseY) {
     }
 }

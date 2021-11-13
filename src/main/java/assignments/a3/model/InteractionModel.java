@@ -10,9 +10,34 @@ public class InteractionModel {
     private Paint selectedColor;
     private ShapeButton selectedButton;
     ArrayList<InteractionModelSubscriber> subs;
+    double handleX, handleY, handleRadius;
+
+    public void setHandleX(double handleX) {
+        this.handleX = handleX;
+    }
+
+    public void setHandleY(double handleY) {
+        this.handleY = handleY;
+    }
+
+
+    public double getHandleX() {
+        return handleX;
+    }
+
+    public double getHandleY() {
+        return handleY;
+    }
+
+    public double getHandleRadius() {
+        return handleRadius;
+    }
+
 
     public InteractionModel() {
         subs = new ArrayList<>();
+        handleX = handleY = 0;
+        handleRadius  = 0.0125;
     }
 
     public void addiSub(InteractionModelSubscriber newSub) {
@@ -23,8 +48,9 @@ public class InteractionModel {
         subs.forEach(sub -> sub.iModelChanged());
     }
 
-    public void setselectedShape(XShape newShape) {
+    public void setselectedShape(XShape newShape, DrawingModel model) {
         selectedShape = newShape;
+        model.setNextZ(newShape);
         notifyiSubs();
     }
 
@@ -48,14 +74,20 @@ public class InteractionModel {
 
     public void unselect() {
         selectedShape = null;
+        notifyiSubs();
+    }
+    private double dist(double x1, double y1, double x2, double y2) {
+        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
 
     public boolean handleHit(double normX, double normY) {
+        boolean hit = dist(normX, normY, handleX + handleRadius, handleY + handleRadius) <= handleRadius;
+        if (hit) {
+            this.getSelectedShape().setCurrentX(normX);
+            this.getSelectedShape().setCurrentY(normY);
+            return true;
+        }
         return false;
     }
-
-    // wrapper method to draw the border and the handle around the selected shape
-    public void shapeSizeChanged() {
-        notifyiSubs();
-    }
 }
+
